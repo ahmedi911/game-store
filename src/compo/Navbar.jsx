@@ -37,24 +37,32 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
+      // Pass the JWT token from cookies to logoutApi
       const [response, error] = await logoutApi(cookies.jwt);
+      
       if (error) {
-        console.error("Logout failed:", error);
+        console.error("Logout error:", error);
+        // Handle error case
+        return;
       }
+      
+      // If successful, remove the JWT cookie
       removeCookie("jwt");
-      navigate("/login");
-    } catch (err) {
-      console.error("An error occurred:", err);
+      setIsOpen(false);
+      navigate("/login"); // Redirect to home page
+    } catch (error) {
+      console.error("An error occurred:", error);
     }
   };
 
   const handleLogin = () => navigate("/login");
   const handleRegister = () => navigate("/register");
 
+
   return (
     <>
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-gray-900 shadow-lg py-2" : "bg-transparent py-4"
+        scrolled ? "bg-gray-900 shadow-lg py-2" : "bg-gray-900 py-4"
       }`}>
         <div className="container px-4 mx-auto sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">

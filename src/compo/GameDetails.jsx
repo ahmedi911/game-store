@@ -11,23 +11,103 @@ const GameDetails = () => {
   const [message, setMessage] = useState('');
   const [quantity, setQuantity] = useState(1);
 
+  // Static game data - same 10 games as in the GamesList component
+   const staticGames = [
+    {
+      id: 1,
+      title: "The Witcher 3: Wild Hunt",
+      description: "An action role-playing game set in an open world environment. As Geralt of Rivia, you'll track down the Child of Prophecy in a vast fantasy world rich with merchant cities, pirate islands, and dangerous mountain passes.",
+      price: 39.99,
+      image_url: "https://cdn-l-thewitcher.cdprojektred.com/meta/TW3NG_thumbnail_en.png",
+      stock: 15
+    },
+    {
+      id: 2,
+      title: "Red Dead Redemption 2",
+      description: "An epic tale of life in America's unforgiving heartland. The game's vast and atmospheric world also provides the foundation for a brand new online multiplayer experience.",
+      price: 59.99,
+      image_url: "https://static.printler.com/cache/8/3/4/2/2/5/834225dedffc2158b91e0b351173b6896ba9a82e.jpg",
+      stock: 8
+    },
+    {
+      id: 3,
+      title: "Cyberpunk 2077",
+      description: "An open-world, action-adventure story set in Night City, a megalopolis obsessed with power, glamour and body modification. Play as a mercenary outlaw going after a one-of-a-kind implant that is the key to immortality.",
+      price: 49.99,
+      image_url: "https://static.printler.com/cache/a/6/1/d/c/7/a61dc7198c498ed7969a0e106844dd0496dbab9a.jpg",
+      stock: 12
+    },
+    {
+      id: 5,
+      title: "Elden Ring",
+      description: "An action RPG developed by FromSoftware, Inc. and produced by BANDAI NAMCO Entertainment Inc. The game is a fantasy action-RPG adventure set within a world created by Hidetaka Miyazaki and George R. R. Martin.",
+      price: 59.99,
+      image_url: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1245620/capsule_616x353.jpg?t=1739922037.jpg",
+      stock: 20
+    },
+    {
+      id: 6,
+      title: "Horizon Forbidden West",
+      description: "Join Aloy as she braves the Forbidden West – a majestic but dangerous frontier that conceals mysterious new threats. Explore distant lands, fight bigger and more awe-inspiring machines, and encounter astonishing new tribes.",
+      price: 49.99,
+      image_url: "https://image.api.playstation.com/vulcan/ap/rnd/202107/3100/yIa8STLMmCyhj48fGDpaAuRM.jpg",
+      stock: 5
+    },
+    {
+      id: 7,
+      title: "Hades",
+      description: "A god-like rogue-like dungeon crawler that combines the best aspects of Supergiant's critically acclaimed titles, including the fast-paced action of Bastion, the rich atmosphere and depth of Transistor, and the character-driven storytelling of Pyre.",
+      price: 24.99,
+      image_url: "https://m.media-amazon.com/images/M/MV5BM2Q2YjRiZmMtODlkMy00Zjc3LWIyYTktOWM3ZDc4YzI2YTYwXkEyXkFqcGc@._V1_.jpg",
+      stock: 30
+    },
+    {
+      id: 8,
+      title: "Final Fantasy VII Remake",
+      description: "A reimagining of the iconic original game that re-defined the RPG genre, diving deeper into the world and its characters than ever before. The first game in the project is set in the eclectic city of Midgar and presents a fully standalone gaming experience.",
+      price: 39.99,
+      image_url: "https://i.ebayimg.com/images/g/IqQAAOSwQWBdeusL/s-l1200.jpg",
+      stock: 10
+    },
+    {
+      id: 9,
+      title: "Ghost of Tsushima",
+      description: "In the late 13th century, the Mongol empire has laid waste to entire nations. Tsushima Island is all that stands between mainland Japan and a massive Mongol invasion fleet. As one of the last surviving samurai, you rise from the ashes to fight back.",
+      price: 49.99,
+      image_url: "https://image.api.playstation.com/vulcan/ap/rnd/202006/2617/vTFdM8FkYYxXvUfLzOmjY3zt.png",
+      stock: 7
+    },
+    {
+      id: 10,
+      title: "Hollow Knight",
+      description: "A challenging 2D action-adventure. You'll explore twisting caverns, battle tainted creatures and escape intricate traps, all to solve an ancient long-hidden mystery.",
+      price: 14.99,
+      image_url: "https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000003208/4643fb058642335c523910f3a7910575f56372f612f7c0c9a497aaae978d3e51",
+      stock: 25
+    }
+  ];
+
   useEffect(() => {
+    // Simulate loading with a slight delay for a better UI experience
     const loadGame = async () => {
       try {
-        const token = localStorage.getItem('token');
+        // Find the game in our static data instead of fetching from API
+        // Convert id to number to match with the numeric ids in staticGames
+        const foundGame = staticGames.find(game => game.id === parseInt(id, 10));
         
-        const [data, error] = await fetchGame(token, id);
-        
-        if (error) {
-          setError(error);
-          return;
+        if (foundGame) {
+          // Simulate a network delay
+          setTimeout(() => {
+            setGame(foundGame);
+            setLoading(false);
+          }, 500);
+        } else {
+          setError('Game not found');
+          setLoading(false);
         }
-        
-        setGame(data);
       } catch (err) {
         setError('Failed to load game details. Please try again later.');
         console.error(err);
-      } finally {
         setLoading(false);
       }
     };
@@ -37,17 +117,11 @@ const GameDetails = () => {
 
   const handleAddToCart = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const cartId = localStorage.getItem('cartId');
-      const [data, error] = await addToCart(token, cartId, game.id, quantity);
-      
-      if (error) {
-        setError(error);
-        return;
-      }
-      
-      setMessage(`${game.title} added to cart!`);
-      setTimeout(() => setMessage(''), 3000);
+      // Simulate API call
+      setTimeout(() => {
+        setMessage(`${game.title} added to cart!`);
+        setTimeout(() => setMessage(''), 3000);
+      }, 300);
     } catch (err) {
       setError('Failed to add game to cart. Please try again later.');
       console.error(err);
@@ -57,15 +131,10 @@ const GameDetails = () => {
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this game?')) {
       try {
-        const token = localStorage.getItem('token');
-        const [success, error] = await deleteGame(token, id);
-        
-        if (error) {
-          setError(error);
-          return;
-        }
-        
-        navigate('/');
+        // Simulate API call and redirect
+        setTimeout(() => {
+          navigate('/');
+        }, 300);
       } catch (err) {
         setError('Failed to delete game. Please try again later.');
         console.error(err);

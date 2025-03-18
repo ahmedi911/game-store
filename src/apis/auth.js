@@ -56,29 +56,30 @@ try{
 
 }
 
-export const logoutApi = async (jwtToken) =>{
-    const requestOption ={
-         method: 'DELETE', // HTTP method
-         headers: {
-         'Content-Type': 'application/json' // Specify JSON format
-          ,'Authorization': jwtToken   },
-    };
+export const logoutApi = async (jwtToken) => {
+  const requestOption = {
+    method: 'DELETE', // HTTP method
+    headers: {
+      'Content-Type': 'application/json', // Specify JSON format
+      'Authorization': jwtToken
+    },
+  };
 
+  // Sending a DELETE request
+  try {
+    const response = await fetch(`${DOMAIN}/users/sign_out`, requestOption);
 
-// Sending a POST request
-try{
-    const response = await fetch(`${DOMAIN}/users/sign_out`,requestOption);
-      if(response.ok){
-        return [response,'']
-      }
+    if (response.ok) {
+      return [response, ''];
+    }
 
-      if(response.status===401){
-      return['',`invalid email or password`]   
-      }
-      const errorMessage = await response.text();
- 
-} catch(error){
-    return['',`Server down: ${error}`]
-}
+    if (response.status === 401) {
+      return ['', `Invalid email or password`];
+    }
 
-}
+    const errorMessage = await response.text();
+    return ['', errorMessage]; // Added this return statement
+  } catch (error) {
+    return ['', `Server down: ${error}`];
+  }
+};
